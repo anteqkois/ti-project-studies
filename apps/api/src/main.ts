@@ -1,23 +1,35 @@
+import './app/container';
+
 import Fastify from 'fastify';
 import { app } from './app/app';
+import { servicesContainer } from './app/container';
 
-const host = process.env.HOST ?? 'localhost';
+const host = process.env.HOST ?? '0.0.0.0';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-// Instantiate Fastify with some config
 const server = Fastify({
-  logger: true,
+  // logger: true,
+  logger: false,
 });
 
-// Register your application as a normal plugin.
 server.register(app);
 
-// Start listening.
 server.listen({ port, host }, (err) => {
   if (err) {
-    server.log.error(err);
+    console.error('Error', err);
     process.exit(1);
   } else {
     console.log(`[ ready ] http://${host}:${port}`);
   }
+});
+
+const exitHandler = async (...args) => {
+  console.error('Error', args);
+  await servicesContainer.unbindAll();
+
+  process.exit(0);
+};
+
+['SIGINT', 'SIGTERM', 'uncaughtException'].forEach((eventType) => {
+  process.on(eventType, exitHandler);
 });

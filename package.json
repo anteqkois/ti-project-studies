@@ -2,14 +2,24 @@
   "name": "@project/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "api": "nx run api:serve",
+    "web": "nx run web:dev",
+    "dev": "concurrently -p \"[{name}]\" -n \"api,web\" -c \"bgBlue.bold,bgGreen.bold,bgCyan.bold\" \"npm:api\" \"npm:web\""
+  },
   "private": true,
   "dependencies": {
     "@fastify/autoload": "~5.7.1",
-    "@fastify/sensible": "~5.2.0",
+    "@fastify/cors": "^11.0.1",
+    "@fastify/sensible": "^6.0.3",
+    "@mongodb-js/zstd": "^2.0.1",
     "axios": "^1.6.0",
-    "fastify": "~4.13.0",
+    "concurrently": "^9.1.2",
+    "dayjs": "^1.11.13",
+    "fastify": "^5.3.2",
     "fastify-plugin": "~4.5.0",
+    "inversify": "^7.5.1",
+    "mongodb": "^6.16.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
