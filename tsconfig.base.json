@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@project/shared": ["libs/shared/src/index.ts"]
+      "@project/shared": ["libs/shared/src/index.ts"],
+      "@project/ui-components": ["libs/ui-components/src/index.ts"],
+      "@project/ui-components/server": ["libs/ui-components/src/server.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
