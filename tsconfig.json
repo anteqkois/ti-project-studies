@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@project/ui-components": ["libs/ui-components/src/index.ts"],
+      "@project/ui-components/*": ["libs/ui-components/src/*"]
+    }
+  }
+}
