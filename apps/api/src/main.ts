@@ -1,8 +1,8 @@
 import './app/container';
 
+import { servicesContainer } from '@project/shared';
 import Fastify from 'fastify';
 import { app } from './app/app';
-import { servicesContainer } from './app/container';
 
 const host = process.env.HOST ?? '0.0.0.0';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;

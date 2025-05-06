@@ -1,8 +1,11 @@
+import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import sensible from '@fastify/sensible';
-import { idSchema } from '@project/shared';
+import { CustomerService, idSchema, registerFastifyPassportAuth, servicesContainer } from '@project/shared';
 import { FastifyInstance } from 'fastify';
+import { ObjectId } from 'mongodb';
 import { isNativeError } from 'util/types';
+import { customersRoutes } from './modules/customers/customer.routes';
 import { notesRoutes } from './modules/notes/notes.routes';
 
 /* eslint-disable-next-line */
@@ -10,11 +13,23 @@ export interface AppOptions {}
 const allowedOrigins = ['http://127.0.0.1:8080', 'http://localhost:8080'];
 
 export async function app(fastify: FastifyInstance, opts: AppOptions) {
+  const customerService =
+    servicesContainer.get<CustomerService>(CustomerService);
+
   fastify.register(sensible);
   fastify.register(fastifyCors, {
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
+
+  // SESSION
+  fastify.register(fastifyCookie);
+  registerFastifyPassportAuth(fastify, {
+    getCustomer(id) {
+      // fetch from DB – return null/false if user vanished
+      return customerService.getOne(new ObjectId(id));
+    }
+  })
 
   fastify.addSchema(idSchema);
 
@@ -30,10 +45,6 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
 
     return done();
   });
-
-  // fastify.addHook('preSerialization', async (request, reply, payload) => {
-  //   return JSON.parse(JSON.stringify(payload, (d, v) => (typeof v === 'bigint' ? Number(v) : v)))
-  // })
 
   fastify.addHook('onError', async (request, reply, error) => {
     console.error(
@@ -58,6 +69,9 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   // routes
   fastify.register(notesRoutes, {
     prefix: '/notes',
+  });
+  fastify.register(customersRoutes, {
+    prefix: '/customers',
   });
 
   // initialize here, not use @postConstruct() because it wil run when the service is requested first time (first api request for this), so better in this way and to see clean what is done

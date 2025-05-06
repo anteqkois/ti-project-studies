@@ -8,7 +8,7 @@ export function getDbName(dbUrl: string): string {
 }
 
 export type Id = ObjectId // Id to db docuemnt
-export const mongoObjectIdFactory = (id?: string) => new ObjectId(id)
+// export const mongoObjectIdFactory = (id?: string) => new ObjectId(id)
 
 export interface DatabaseTimestamp {
   created_at?: Date

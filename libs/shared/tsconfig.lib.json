@@ -7,5 +7,5 @@
     "types": ["node"]
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../../apps/api/src/app/modules/customers/customers.service.ts", "../../apps/api/src/app/modules/storage/mongoCollections.ts"]
 }

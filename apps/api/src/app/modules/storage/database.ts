@@ -1,7 +1,6 @@
+import { assertNotEmpty, getDbName } from '@project/shared';
 import { injectable } from 'inversify';
 import { Db, MongoClient, ServerApiVersion } from 'mongodb';
-import { assertNotEmpty } from '../../common';
-import { getDbName } from './types';
 
 @injectable()
 export class Database {

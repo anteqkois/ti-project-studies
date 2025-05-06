@@ -1,3 +1,5 @@
-export * from './customers.service'
+export * from './auth/types'
+export * from './types/auth'
+export * from './types/customer'
 export * from './types/jwt'
-export * from './types/configuration'
+
