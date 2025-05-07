@@ -11,13 +11,13 @@ import { cn } from '@project/ui-components/utils';
 import { Label } from '@radix-ui/react-label';
 import { useCustomer } from '../../../modules/customer/useCustomer';
 import { retriveServerHttpException } from '../../../utils';
-import { userAuthSchema } from '../validations';
+import { customerAuthSchema } from '../validations';
 
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
+type CustomerAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-type FormData = z.infer<typeof userAuthSchema>;
+type FormData = z.infer<typeof customerAuthSchema>;
 
-export function LoginForm({ className, ...props }: UserAuthFormProps) {
+export function LoginForm({ className, ...props }: CustomerAuthFormProps) {
   const { login } = useCustomer();
   const {
     register,
@@ -25,7 +25,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     setError,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
+    resolver: zodResolver(customerAuthSchema),
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -45,7 +45,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         });
       console.error(error);
       return setError('root', {
-        message: 'Your sign in request failed. Please try again.',
+        message: 'Twoja próba logowania nie powiodła się. Spróbuj ponwonie.',
         type: 'manual',
       });
     }
@@ -66,7 +66,6 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              // disabled={isLoading || isGitHubLoading}
               disabled={isLoading}
               {...register('email')}
             />
@@ -78,7 +77,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
-              Password
+              Hasło
             </Label>
             <div className="relative">
               <Input
@@ -116,7 +115,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
               )}
             </div>
           </div>
-          <ButtonClient loading={isLoading}>Login with Email</ButtonClient>
+          <ButtonClient loading={isLoading}>Zaloguj się</ButtonClient>
         </div>
       </form>
     </div>

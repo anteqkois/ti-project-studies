@@ -4,7 +4,7 @@ import * as z from 'zod';
 const commonPasswords = ['password', '123456', '12345678', 'qwerty', 'abc123', 'password1'];
 const isCommonPassword = (password: string) => commonPasswords.includes(password);
 
-export const userAuthSchema = z.object({
+export const customerAuthSchema = z.object({
   email: z.string().email(),
   password: z.string().
   min(8, { message: "Password must be at least 8 characters long." })

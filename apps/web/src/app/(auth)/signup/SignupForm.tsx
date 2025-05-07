@@ -11,13 +11,13 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useCustomer } from '../../../modules/customer/useCustomer'
 import { retriveServerHttpException } from '../../../utils'
-import { userAuthSchema } from '../validations'
+import { customerAuthSchema } from '../validations'
 
-type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>
+type CustomerAuthFormProps = React.HTMLAttributes<HTMLDivElement>
 
-type FormData = z.infer<typeof userAuthSchema>
+type FormData = z.infer<typeof customerAuthSchema>
 
-export function SignUpForm({ className, ...props }: UserAuthFormProps) {
+export function SignUpForm({ className, ...props }: CustomerAuthFormProps) {
   const { signUp } = useCustomer()
   const { push } = useRouter()
 
@@ -27,7 +27,7 @@ export function SignUpForm({ className, ...props }: UserAuthFormProps) {
     setError,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
+    resolver: zodResolver(customerAuthSchema),
   })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState(false)

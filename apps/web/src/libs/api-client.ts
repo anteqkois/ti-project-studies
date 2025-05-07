@@ -42,7 +42,7 @@ apiClient.interceptors.response.use(
           await waitMs(500)
           return apiClient.request(originalRequest)
         }
-        // Move user to login page, tell that session expired
+        // Move customer to login page, tell that session expired
         // clearAuthCookies()
         await redirectToLogin()
       } catch (e) {

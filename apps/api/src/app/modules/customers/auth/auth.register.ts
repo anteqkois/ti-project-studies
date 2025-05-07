@@ -23,7 +23,7 @@ export const registerFastifyPassportAuth = (
         secretOrKey: process.env.JWT_SECRET_KEY,
       },
       async (payload, done) => {
-        // payload is whatever you signed (e.g. { sub: user.id, role: 'admin' })
+        // payload is whatever you signed (e.g. { sub: customer.id, role: 'admin' })
         const customer = await getCustomer(payload.sub);
         if (!customer) return done(null, false);
         done(null, customer);

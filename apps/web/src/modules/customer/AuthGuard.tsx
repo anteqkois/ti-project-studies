@@ -1,11 +1,11 @@
 'use client'
 
-import { AuthStatus } from '@linkerry/shared'
+import { AuthStatus } from '@project/shared'
 import { useRouter } from 'next/navigation'
 import { HTMLAttributes, useEffect } from 'react'
 import { useCustomer } from './useCustomer'
 
-export interface AuthGuardProps extends HTMLAttributes<HTMLElement> {}
+export type AuthGuardProps = HTMLAttributes<HTMLElement>
 
 export const AuthGuard = () => {
   const { authStatus } = useCustomer()
@@ -13,7 +13,7 @@ export const AuthGuard = () => {
 
   useEffect(() => {
     if (authStatus === AuthStatus.UNAUTHENTICATED) {
-      console.warn('User unauthenticated')
+      console.warn('customer unauthenticated')
       push('/login')
     }
   }, [])

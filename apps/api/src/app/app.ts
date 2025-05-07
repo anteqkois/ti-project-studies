@@ -1,11 +1,12 @@
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import sensible from '@fastify/sensible';
-import { CustomerService, idSchema, registerFastifyPassportAuth, servicesContainer } from '@project/shared';
+import { idSchema } from '@project/shared';
 import { FastifyInstance } from 'fastify';
-import { ObjectId } from 'mongodb';
 import { isNativeError } from 'util/types';
+import { servicesContainer } from './container';
 import { customersRoutes } from './modules/customers/customer.routes';
+import { CustomerService } from './modules/customers/customers.service';
 import { notesRoutes } from './modules/notes/notes.routes';
 
 /* eslint-disable-next-line */
@@ -24,12 +25,12 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
 
   // SESSION
   fastify.register(fastifyCookie);
-  registerFastifyPassportAuth(fastify, {
-    getCustomer(id) {
-      // fetch from DB – return null/false if user vanished
-      return customerService.getOne(new ObjectId(id));
-    }
-  })
+  // registerFastifyPassportAuth(fastify, {
+  //   getCustomer(id) {
+  //     // fetch from DB – return null/false if user vanished
+  //     return customerService.getOne(new ObjectId(id));
+  //   }
+  // })
 
   fastify.addSchema(idSchema);
 
@@ -40,7 +41,7 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
       query: request.query,
       body: request.body,
       params: request.params,
-      user: request?.customer ? request.customer.sub : 'unknwon',
+      customer: request?.customer ? request.customer.sub : 'unknwon',
     });
 
     return done();
@@ -48,7 +49,7 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
 
   fastify.addHook('onError', async (request, reply, error) => {
     console.error(
-      `user: ${request?.customer ? request.customer.sub : 'unknwon'}\n${error}`,
+      `customer: ${request?.customer ? request.customer.sub : 'unknwon'}\n${error}`,
       {
         url: `${request.method} ${request.url}`,
         origin: request.headers.origin,

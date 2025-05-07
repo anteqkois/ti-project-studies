@@ -19,9 +19,9 @@ export class AuthApi {
 }
 
 export class CustomerApi {
-  static async me() {
-    return apiClient.get(
-      '/users/live-chat',
-    )
-  }
+  // static async me() {
+  //   return apiClient.get(
+  //     '/customer/live-chat',
+  //   )
+  // }
 }

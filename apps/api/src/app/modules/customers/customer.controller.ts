@@ -1,11 +1,11 @@
 import {
   Customer,
-  Database,
-  DatabaseCollection,
-  servicesContainer,
 } from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ObjectId } from 'mongodb';
+import { servicesContainer } from '../../container';
+import { Database } from '../storage/database';
+import { DatabaseCollection } from '../storage/mongoCollections';
 
 export class CustomerController {
   static async getOne(req: FastifyRequest, res: FastifyReply) {

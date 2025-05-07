@@ -1,5 +1,5 @@
-import { Database } from '@project/shared';
 import { inject, injectable, preDestroy } from 'inversify';
+import { Database } from '../storage/database';
 
 @injectable()
 export class NotesService {
