@@ -17,7 +17,7 @@ export class AuthController {
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: '60m',
-        algorithm:'HS256'
+        algorithm: 'HS256',
       }
     );
 
@@ -30,7 +30,7 @@ export class AuthController {
         secure: true,
         maxAge: 60 * 60, // 60 minutes in seconds
       })
-      .send(newCustomer)
+      .send({ customer: newCustomer });
   }
 
   static async login(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
@@ -45,7 +45,7 @@ export class AuthController {
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: '60m',
-        algorithm:'HS256'
+        algorithm: 'HS256',
       }
     );
 
@@ -58,11 +58,14 @@ export class AuthController {
         secure: true,
         maxAge: 60 * 60, // 60 minutes in seconds
       })
-      .send(customer);
+      .send({ customer });
   }
 
   static async logout(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
-    return res.clearCookie(Cookies.ACCESS_TOKEN, { path: '/' }).code(204);
+    return res
+      .clearCookie(Cookies.ACCESS_TOKEN, { path: '/' })
+      .code(204)
+      .send();
   }
 }
 
