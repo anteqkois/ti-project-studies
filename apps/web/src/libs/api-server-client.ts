@@ -3,11 +3,11 @@ import axios from 'axios'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export const API_URL = process.env.NEXT_PUBLIC_API_HOST ?? 'https://api.linkerry.com'
+export const API_URL = process.env.NEXT_PUBLIC_API_HOST
 
 const apiServerClient = axios.create({
   withCredentials: true,
-  baseURL: `${API_URL}/api/v1`,
+  baseURL: API_URL,
 })
 
 apiServerClient.interceptors.request.use(async (config) => {

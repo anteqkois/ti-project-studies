@@ -5,11 +5,11 @@ export const redirectToLogin = () => {
   window.location.href = `/login?from=${window.location.pathname}`
 }
 
-export const API_URL = process.env.NEXT_PUBLIC_API_HOST ?? 'https://api.linkerry.com'
+export const API_URL = process.env.NEXT_PUBLIC_API_HOST
 
 const apiClient = axios.create({
   withCredentials: true,
-  baseURL: `${API_URL}/api/v1`,
+  baseURL: API_URL,
 })
 
 apiClient.interceptors.request.use(async (config) => {
@@ -44,10 +44,10 @@ apiClient.interceptors.response.use(
         }
         // Move customer to login page, tell that session expired
         // clearAuthCookies()
-        await redirectToLogin()
+        // await redirectToLogin()
       } catch (e) {
         // clearAuthCookies()
-        await redirectToLogin()
+        // await redirectToLogin()
       }
     }
     throw error

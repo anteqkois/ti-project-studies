@@ -1,5 +1,4 @@
-export * from './auth/types'
-export * from './types/auth'
+export * from './auth'
 export * from './types/customer'
 export * from './types/jwt'
 

@@ -1,5 +1,5 @@
-import { IAuthLoginResponse, IAuthLogoutResponse, LoginInput, SignUpInput, SignUpResponse } from "@project/shared"
-import { apiClient } from "../../libs/api-client"
+import { IAuthLoginResponse, IAuthLogoutResponse, LoginInput, SignUpInput, SignUpResponse } from "@project/shared";
+import { apiClient } from "../../libs/api-client";
 
 export class AuthApi {
   static async login(input: LoginInput) {

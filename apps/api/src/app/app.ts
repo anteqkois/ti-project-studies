@@ -4,33 +4,28 @@ import sensible from '@fastify/sensible';
 import { idSchema } from '@project/shared';
 import { FastifyInstance } from 'fastify';
 import { isNativeError } from 'util/types';
-import { servicesContainer } from './container';
+import { authRoutes } from './modules/customers/auth/auth.routes';
 import { customersRoutes } from './modules/customers/customer.routes';
-import { CustomerService } from './modules/customers/customers.service';
 import { notesRoutes } from './modules/notes/notes.routes';
 
 /* eslint-disable-next-line */
 export interface AppOptions {}
-const allowedOrigins = ['http://127.0.0.1:8080', 'http://localhost:8080'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://0.0.0.0:3000',
+  'http://127.0.0.1:3000',
+];
 
 export async function app(fastify: FastifyInstance, opts: AppOptions) {
-  const customerService =
-    servicesContainer.get<CustomerService>(CustomerService);
-
-  fastify.register(sensible);
   fastify.register(fastifyCors, {
+    credentials: true,
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 
-  // SESSION
+  fastify.register(sensible);
+
   fastify.register(fastifyCookie);
-  // registerFastifyPassportAuth(fastify, {
-  //   getCustomer(id) {
-  //     // fetch from DB – return null/false if user vanished
-  //     return customerService.getOne(new ObjectId(id));
-  //   }
-  // })
 
   fastify.addSchema(idSchema);
 
@@ -49,7 +44,9 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
 
   fastify.addHook('onError', async (request, reply, error) => {
     console.error(
-      `customer: ${request?.customer ? request.customer.sub : 'unknwon'}\n${error}`,
+      `customer: ${
+        request?.customer ? request.customer.sub : 'unknwon'
+      }\n${error}`,
       {
         url: `${request.method} ${request.url}`,
         origin: request.headers.origin,
@@ -68,18 +65,13 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   });
 
   // routes
+  fastify.register(authRoutes, {
+    prefix: '/auth',
+  });
   fastify.register(notesRoutes, {
     prefix: '/notes',
   });
   fastify.register(customersRoutes, {
     prefix: '/customers',
   });
-
-  // initialize here, not use @postConstruct() because it wil run when the service is requested first time (first api request for this), so better in this way and to see clean what is done
-  // const indexMetadataService = servicesContainer.get(IndexMetadataService);
-  // // call this to initialize orchiestrators
-  // servicesContainer.get(ConditionsService);
-  // servicesContainer.get(TriggersService);
-  // servicesContainer.get(AdminService);
-  // await indexMetadataService.onInit();
 }

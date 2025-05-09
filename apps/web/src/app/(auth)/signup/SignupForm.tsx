@@ -44,7 +44,7 @@ export function SignUpForm({ className, ...props }: CustomerAuthFormProps) {
       if (signUpResponse.error) throw new Error('Something went wrong')
 
       setIsLoading(false)
-      push('/app/dashboard')
+      // push('/app/dashboard')
     } catch (error) {
       setIsLoading(false)
       const serverError = retriveServerHttpException(error)

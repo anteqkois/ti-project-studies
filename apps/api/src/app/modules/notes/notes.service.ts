@@ -1,4 +1,4 @@
-import { inject, injectable, preDestroy } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { Database } from '../storage/database';
 
 @injectable()
@@ -8,11 +8,6 @@ export class NotesService {
     private readonly database: Database,
   ) {
     //
-  }
-
-  @preDestroy()
-  onDestroy() {
-    // if (this.checkerInterval) clearInterval(this.checkerInterval);
   }
 
   async getServiceStats() {

@@ -79,8 +79,8 @@ export function CustomerProvider({ children }: PropsWithChildren) {
       value={{
         authStatus,
         setAuthStatus,
-        customer: customer,
-        setCustomer: setCustomer,
+        customer,
+        setCustomer,
         signUp,
         login,
         logout,

@@ -1,23 +1,15 @@
-import {
-  Customer,
-} from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ObjectId } from 'mongodb';
 import { servicesContainer } from '../../container';
-import { Database } from '../storage/database';
-import { DatabaseCollection } from '../storage/mongoCollections';
+import { CustomerService } from './customers.service';
 
 export class CustomerController {
   static async getOne(req: FastifyRequest, res: FastifyReply) {
-    const database = servicesContainer.get<Database>(Database);
-    const customer = await database.db
-      .collection<Customer>(DatabaseCollection.customers)
-      .findOne({
-        _id: new ObjectId(req.customer.sub),
-      });
-    if (!customer) return res.notFound();
-    delete customer.password;
+    const customerService = servicesContainer.get<CustomerService>(CustomerService);
 
-    return res.send(customer);
+    const customer = await customerService.getOne(new ObjectId( req.customer.sub))
+    if(!customer) if (!customer) return res.notFound();
+
+    return res.send(customer)
   }
 }

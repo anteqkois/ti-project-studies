@@ -1,14 +1,13 @@
 // import 'passport-jwt';
-import fastifyPassport from '@fastify/passport';
 import { FastifyInstance } from 'fastify';
+import { authMiddleware } from '../../middlewares/auth.middleware';
 import { CustomerController } from './customer.controller';
 
 export const customersRoutes = async (fastify: FastifyInstance) => {
   fastify.get(
     '/me',
     {
-      preValidation:
-        fastifyPassport.authenticate('jwt')
+      preValidation: authMiddleware,
     },
     CustomerController.getOne
   );

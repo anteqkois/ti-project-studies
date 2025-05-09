@@ -1,9 +1,38 @@
+import { Cookies, LoginInput, SignUpInput } from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import * as jwt from 'jsonwebtoken';
 import { servicesContainer } from '../../../container';
 import { AuthService } from './auth.service';
-import { Cookies } from '@project/shared';
 
 export class AuthController {
+  static async signiUp(req: FastifyRequest<SignInRequest>, res: FastifyReply) {
+    const authService = servicesContainer.get<AuthService>(AuthService);
+
+    const { email, name, password } = req.body;
+
+    const newCustomer = await authService.register(email, password, name);
+
+    const token = await jwt.sign(
+      { sub: newCustomer._id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: '60m',
+        algorithm:'HS256'
+      }
+    );
+
+    // Store it in an HttpOnly cookie
+    return res
+      .setCookie(Cookies.ACCESS_TOKEN, token, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+        maxAge: 60 * 60, // 60 minutes in seconds
+      })
+      .send(newCustomer)
+  }
+
   static async login(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
     const { email, password } = req.body;
 
@@ -11,34 +40,36 @@ export class AuthController {
     const customer = await authService.verifyCredentials(email, password);
     if (!customer) return res.code(401).send({ error: 'Bad credentails' });
 
-    const token = await res.jwtSign(
+    const token = await jwt.sign(
       { sub: customer._id },
+      process.env.JWT_SECRET_KEY,
       {
         expiresIn: '60m',
+        algorithm:'HS256'
       }
     );
 
     // Store it in an HttpOnly cookie
-    res
+    return res
       .setCookie(Cookies.ACCESS_TOKEN, token, {
         path: '/',
         httpOnly: true,
         sameSite: 'lax',
         secure: true,
-        maxAge: 60 * 60, // 15 minutes in seconds
+        maxAge: 60 * 60, // 60 minutes in seconds
       })
-      .code(204)
-      .send();
+      .send(customer);
   }
 
   static async logout(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
-    res.clearCookie(Cookies.ACCESS_TOKEN, { path: '/' }).code(204).send();
+    return res.clearCookie(Cookies.ACCESS_TOKEN, { path: '/' }).code(204);
   }
 }
 
+export interface SignInRequest {
+  Body: SignUpInput;
+}
+
 export interface LoginRequest {
-  Body: {
-    email: string;
-    password: string;
-  };
+  Body: LoginInput;
 }

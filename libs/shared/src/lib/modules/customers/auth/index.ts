@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { stringShortSchema } from '../../../libs/zod'
-import { Customer } from './customer'
+import { Customer } from '../types/customer'
 
 export const signUpInputSchema = z.object({
   email: z.string().email().min(3).max(50),
@@ -30,4 +30,10 @@ export interface IAuthLoginResponse {
 
 export interface IAuthLogoutResponse {
   error: string | undefined
+}
+
+export enum AuthStatus {
+  LOADING = 'LOADING',
+  AUTHENTICATED = 'AUTHENTICATED',
+  UNAUTHENTICATED = 'UNAUTHENTICATED',
 }
