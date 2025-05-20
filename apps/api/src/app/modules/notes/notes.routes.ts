@@ -1,19 +1,10 @@
 import { FastifyInstance } from 'fastify';
+import { authMiddleware } from '../../middlewares/auth.middleware';
 
 export const notesRoutes = async (fastify: FastifyInstance) => {
   // fastify.get(
   //   '/:id',
-  //   { preValidation: authAdminMiddleware },
+  //   { preValidation: authMiddleware },
   //   AdminController.getOne
-  // );
-  // fastify.post(
-  //   '/',
-  //   { preValidation: authAdminMiddleware },
-  //   AdminController.getConditionsStats
-  // );
-  // fastify.get(
-  //   '/',
-  //   { preValidation: authAdminMiddleware },
-  //   AdminController.getTriggerStats
   // );
 };
