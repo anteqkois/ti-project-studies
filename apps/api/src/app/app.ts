@@ -74,4 +74,6 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   fastify.register(customersRoutes, {
     prefix: '/customers',
   });
+  fastify.register(notesRoutes, { prefix: '/api/notes' });
+
 }
