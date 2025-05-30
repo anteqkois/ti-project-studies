@@ -1,24 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
 import {
   Box,
-  Container,
-  Typography,
   Button,
-  TextField,
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  InputAdornment,
   CircularProgress,
+  Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  InputAdornment,
   Paper,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
+import { Id, Note } from '@project/shared';
+import { useEffect, useState } from 'react';
+import { apiClient } from '../../libs/api-client';
 import { NoteCard } from './NoteCard';
 import { NoteForm } from './NoteForm';
-import { Id, Note } from '@project/shared';
 
 
 
@@ -36,14 +37,9 @@ export function NotesPage() {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch('/api/notes', {
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        const notesData = await response.json();
-        setNotes(notesData);
-      }
+      const { data } = await apiClient.get('/notes')
+      console.log(data);
+      setNotes(data);
     } catch (error) {
       console.error('Failed to fetch notes:', error);
     } finally {
@@ -66,7 +62,7 @@ export function NotesPage() {
     tags: string[];
   }) => {
     try {
-      const response = await fetch('/api/notes', {
+      const response = await fetch('/notes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +89,7 @@ export function NotesPage() {
     noteData: { title: string; content: string; tags: string[] }
   ) => {
     try {
-      const response = await fetch(`/api/notes/${id}`, {
+      const response = await fetch(`/notes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +114,7 @@ export function NotesPage() {
     if (!confirm('Are you sure you want to delete this note?')) return;
 
     try {
-      const response = await fetch(`/api/notes/${id}`, {
+      const response = await fetch(`/notes/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -211,9 +207,10 @@ export function NotesPage() {
         </Paper>
       ) : (
         <Grid container spacing={3}>
-          {filteredNotes.map((note) => (
+          {filteredNotes.map((note, index) => (
             // <Grid item xs={12} sm={6} lg={4} key={note._id}>
               <NoteCard
+                key={index}
                 note={note}
                 onEdit={() => setEditingNote(note)}
                 onDelete={() => handleDeleteNote(note._id as unknown as string)}

@@ -1,18 +1,18 @@
 // PasswordSettings.tsx - Password change component
-import { useState, useEffect } from 'react';
+import { Lock as LockIcon } from '@mui/icons-material';
 import {
+  Alert,
   Box,
-  Typography,
+  Button,
   Card,
   CardContent,
   CardHeader,
-  TextField,
-  Button,
-  Alert,
-  Divider,
   CircularProgress,
+  Divider,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { Lock as LockIcon } from '@mui/icons-material';
+import { useState } from 'react';
 
 export function PasswordSettings() {
   const [isChanging, setIsChanging] = useState(false);
@@ -54,7 +54,7 @@ export function PasswordSettings() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/customers/me/password', {
+      const response = await fetch('/customers/me/password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

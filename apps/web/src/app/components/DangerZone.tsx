@@ -39,7 +39,7 @@ export function DangerZone({ onAccountDeleted }: DangerZoneProps) {
     setIsDeleting(true);
 
     try {
-      const response = await fetch('/api/customers/me', {
+      const response = await fetch('/customers/me', {
         method: 'DELETE',
         credentials: 'include',
       });

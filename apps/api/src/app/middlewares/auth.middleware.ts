@@ -5,7 +5,7 @@ export const authMiddleware: preValidationAsyncHookHandler = async (
   request,
   reply
 ) => {
-  const token = AuthService.retriveJwtToken(request.headers.authorization);
+  const token = request.cookies?.ACCESS_TOKEN
   if (!token) return reply.status(401).send('Unauthorized');
 
   const customer = AuthService.getCustomerFromJWTToken(token);

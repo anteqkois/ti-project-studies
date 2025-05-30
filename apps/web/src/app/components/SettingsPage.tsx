@@ -1,22 +1,22 @@
 // SettingsPage.tsx - Main settings page with Material-UI
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Warning as WarningIcon } from '@mui/icons-material';
 import {
-  Box,
-  Typography,
   Alert,
   AlertTitle,
+  Box,
   CircularProgress,
   Container,
+  Typography,
 } from '@mui/material';
-import { Warning as WarningIcon } from '@mui/icons-material';
-import { useCustomer } from '../../modules/customer/useCustomer';
+import { Customer } from '@project/shared';
 import { useRouter } from 'next/navigation';
-import { ProfileSettings } from './ProfileSettings';
-import { PasswordSettings } from './PasswordSettings';
+import { useEffect, useState } from 'react';
+import { useCustomer } from '../../modules/customer/useCustomer';
 import { DangerZone } from './DangerZone';
-import { Customer, CustomerRole } from '@project/shared';
+import { PasswordSettings } from './PasswordSettings';
+import { ProfileSettings } from './ProfileSettings';
 
 
 
@@ -32,7 +32,7 @@ export function SettingsPage() {
 
   const fetchCustomerData = async () => {
     try {
-      const response = await fetch('/api/customers/me', {
+      const response = await fetch('/customers/me', {
         credentials: 'include',
       });
       if (response.ok) {

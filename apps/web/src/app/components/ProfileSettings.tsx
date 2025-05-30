@@ -1,25 +1,25 @@
 // ProfileSettings.tsx - Profile information component
-import { useState } from 'react';
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  TextField,
-  Button,
-  Alert,
-  Grid,
-  Divider,
-  CircularProgress,
-  Chip,
-} from '@mui/material';
-import {
-  Person as PersonIcon,
-  Save as SaveIcon,
-  Edit as EditIcon,
+    Edit as EditIcon,
+    Person as PersonIcon,
+    Save as SaveIcon,
 } from '@mui/icons-material';
+import {
+    Alert,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Chip,
+    CircularProgress,
+    Divider,
+    Grid,
+    TextField,
+    Typography,
+} from '@mui/material';
 import { Customer } from '@project/shared';
+import { useState } from 'react';
 
 interface ProfileSettingsProps {
   customer: Customer;
@@ -41,7 +41,7 @@ export function ProfileSettings({ customer, onUpdate }: ProfileSettingsProps) {
     setMessage(null);
 
     try {
-      const response = await fetch('/api/customers/me/settings', {
+      const response = await fetch('/customers/me/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ export function ProfileSettings({ customer, onUpdate }: ProfileSettingsProps) {
         )}
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          
+
             <TextField
               fullWidth
               label="Name"
@@ -138,7 +138,7 @@ export function ProfileSettings({ customer, onUpdate }: ProfileSettingsProps) {
                 readOnly: !isEditing,
               }}
             />
-         
+
             <TextField
               fullWidth
               label="Email Address"
@@ -158,7 +158,7 @@ export function ProfileSettings({ customer, onUpdate }: ProfileSettingsProps) {
                 sx={{ mt: 1 }}
               />
             )}
-          
+
         </Grid>
 
         <Divider sx={{ my: 2 }} />

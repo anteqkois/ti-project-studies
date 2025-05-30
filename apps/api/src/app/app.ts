@@ -74,6 +74,9 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   fastify.register(customersRoutes, {
     prefix: '/customers',
   });
-  fastify.register(notesRoutes, { prefix: '/api/notes' });
 
+  fastify.ready((err) => {
+    if (err) throw err;
+    console.log('Avaible routes\n', fastify.printRoutes());
+  });
 }
