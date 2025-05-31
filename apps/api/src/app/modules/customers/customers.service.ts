@@ -11,52 +11,65 @@ export class CustomerService {
     private readonly database: Database
   ) {}
 
-  async getOne(id: Id) {
+  async getOne(id: Id): Promise<Customer | null> {
     const customer = await this.database.db
       .collection<Customer>(DatabaseCollection.customers)
-      .findOne({
-        _id: id,
-      });
+      .findOne({ _id: id });
+    
     if (!customer) return null;
 
-    delete customer.password;
-    return customer;
+    // Remove password from response
+    const { password, ...customerWithoutPassword } = customer;
+    return customerWithoutPassword as Customer;
   }
 
   async updateSettings(id: Id, updateData: UpdateCustomerInput): Promise<Customer | null> {
     const updateFields: Partial<Customer> = {};
 
+    // Handle name update
     if (updateData.name !== undefined) {
-      // Check if name is already taken by another user
-      const existingCustomer = await this.database.db
-        .collection<Customer>(DatabaseCollection.customers)
-        .findOne({
-          name: updateData.name,
-          _id: { $ne: id },
-        });
+      if (updateData.name.trim()) {
+        // Check if name is already taken by another user
+        const existingCustomer = await this.database.db
+          .collection<Customer>(DatabaseCollection.customers)
+          .findOne({
+            name: updateData.name.trim(),
+            _id: { $ne: id },
+          });
 
-      if (existingCustomer) {
-        throw new Error('Name is already taken');
+        if (existingCustomer) {
+          throw new Error('Name is already taken');
+        }
+        updateFields.name = updateData.name.trim();
+      } else {
+        // Allow empty name (optional field)
+        updateFields.name = undefined;
       }
-      updateFields.name = updateData.name;
     }
 
+    // Handle email update
     if (updateData.email !== undefined) {
+      if (!updateData.email.trim()) {
+        throw new Error('Email is required');
+      }
+
       // Check if email is already taken by another user
       const existingCustomer = await this.database.db
         .collection<Customer>(DatabaseCollection.customers)
         .findOne({
-          email: updateData.email,
+          email: updateData.email.trim(),
           _id: { $ne: id },
         });
 
       if (existingCustomer) {
         throw new Error('Email is already taken');
       }
-      updateFields.email = updateData.email;
+      
+      updateFields.email = updateData.email.trim();
       updateFields.email_verified_datetime = null; // Reset email verification
     }
 
+    // Handle settings update
     if (updateData.settings !== undefined) {
       updateFields.settings = { ...updateData.settings };
     }
@@ -74,11 +87,11 @@ export class CustomerService {
         { returnDocument: 'after' }
       );
 
-    //if (!result.value) return null;
-    console.log(result)
+    if (!result) return null;
 
-    // delete result.value.password;
-    // return result.value;
+    // Remove password from response
+    const { password, ...customerWithoutPassword } = result;
+    return customerWithoutPassword as Customer;
   }
 
   async changePassword(id: Id, currentPassword: string, newPassword: string): Promise<void> {
@@ -95,6 +108,11 @@ export class CustomerService {
     const isCurrentPasswordValid = await bcrypt.compare(currentPassword, customer.password);
     if (!isCurrentPasswordValid) {
       throw new Error('Current password is incorrect');
+    }
+
+    // Validate new password
+    if (newPassword.length < 6) {
+      throw new Error('New password must be at least 6 characters long');
     }
 
     // Hash new password

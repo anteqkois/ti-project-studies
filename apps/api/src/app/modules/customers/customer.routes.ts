@@ -32,7 +32,7 @@ export const customersRoutes = async (fastify: FastifyInstance) => {
 
   // Delete account
   fastify.delete(
-    '/me',
+    '/delete',
     {
       preValidation: authMiddleware,
     },
