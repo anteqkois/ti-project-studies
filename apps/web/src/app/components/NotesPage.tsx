@@ -94,7 +94,7 @@ export function NotesPage() {
   };
 
   const handleDeleteNote = async (id: string) => {
-    if (!confirm('Delete this note?')) return;
+    if (!confirm('Usunąć tą notatkę?')) return;
     
     try {
       await apiClient.delete(`/notes/${id}`);
@@ -123,9 +123,8 @@ export function NotesPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f8fafc'
       }}>
-        <CircularProgress />
+        <CircularProgress sx={{ color: '#60a5fa' }} />
       </Box>
     );
   }
@@ -137,22 +136,21 @@ export function NotesPage() {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: '#f8fafc',
       display: 'flex',
       flexDirection: 'column'
     }}>
       {/* Header */}
-      <Box sx={{ 
-        backgroundColor: 'white',
-        borderBottom: '1px solid #e2e8f0',
+      <Box sx={{ //#1e2328
+        backgroundColor: '#6c28d9',
+        borderBottom: '1px solid #374151',
         p: 2,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexShrink: 0
       }}>
-        <Typography variant="h5" sx={{ fontWeight: 600, color: '#1e293b' }}>
-          My Notes
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          NOTATKI
         </Typography>
         
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -161,20 +159,26 @@ export function NotesPage() {
             startIcon={<AddIcon />}
             onClick={() => setIsCreateDialogOpen(true)}
             sx={{ 
-              backgroundColor: '#3b82f6',
-              '&:hover': { backgroundColor: '#2563eb' },
-              textTransform: 'none',
-              fontWeight: 500
+              backgroundColor: '#872ffa',
+              fontWeight: 500,
+              border: '1px white solid'
             }}
           >
-            New Note
+            dodaj
           </Button>
           
-          <IconButton onClick={handleSettings} title="Settings">
+          <IconButton 
+            onClick={handleSettings} 
+            title="Ustawienia"
+            
+          >
             <SettingsIcon />
           </IconButton>
           
-          <IconButton onClick={handleLogout} title="Logout">
+          <IconButton 
+            onClick={handleLogout} 
+            title="Wyloguj"
+          >
             <LogoutIcon />
           </IconButton>
         </Box>
@@ -190,30 +194,34 @@ export function NotesPage() {
         <Box sx={{ mb: 3, maxWidth: 500 }}>
           <TextField
             fullWidth
-            placeholder="Search notes..."
+            placeholder="Wyszukaj notatki..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {setSearchQuery(e.target.value)}}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#64748b' }} />
+                  <SearchIcon sx={{ color: '#6b7280' }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
-                backgroundColor: 'white',
-                '& fieldset': { borderColor: '#e2e8f0' },
-                '&:hover fieldset': { borderColor: '#cbd5e1' },
+                color: '#f1f5f9',
+                '& fieldset': { borderColor: '#374151' },
+                '&:hover fieldset': { borderColor: '#4b5563' },
                 '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: '#9ca3af',
+                opacity: 1,
               },
             }}
           />
         </Box>
 
         {/* Stats */}
-        <Typography variant="body2" sx={{ color: '#64748b', mb: 3 }}>
-          {notes.length} {notes.length === 1 ? 'note' : 'notes'}
+        <Typography variant="body2" sx={{ color: '#9ca3af', mb: 3 }}>
+          Suma posiadanych materiałów: {notes.length} {notes.length === 1 ? 'notatka' : 'notki'}
         </Typography>
 
         {/* Notes */}
@@ -221,19 +229,27 @@ export function NotesPage() {
           <Paper sx={{ 
             p: 6, 
             textAlign: 'center',
-            backgroundColor: 'white',
-            border: '1px solid #e2e8f0'
+            backgroundColor: '#1e2328',
+            border: '1px solid #374151'
           }}>
-            <Typography variant="h6" sx={{ color: '#64748b', mb: 2 }}>
-              {searchQuery ? 'No notes found' : 'No notes yet'}
+            <Typography variant="h6" sx={{ color: '#9ca3af', mb: 2 }}>
+              {searchQuery ? 'Nie znaleziono notatek' : 'Nie ma notatek'}
             </Typography>
             {!searchQuery && (
               <Button
                 variant="outlined"
                 onClick={() => setIsCreateDialogOpen(true)}
-                sx={{ textTransform: 'none' }}
+                sx={{ 
+                  textTransform: 'none',
+                  borderColor: '#374151',
+                  color: '#9ca3af',
+                  '&:hover': {
+                    borderColor: '#4b5563',
+                    backgroundColor: '#374151'
+                  }
+                }}
               >
-                Create your first note
+                Stwórz swoją pierwszą notatkę!
               </Button>
             )}
           </Paper>
@@ -258,9 +274,17 @@ export function NotesPage() {
         onClose={() => setIsCreateDialogOpen(false)}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: '#1e2328',
+            color: '#f1f5f9'
+          }
+        }}
       >
-        <DialogTitle>Create New Note</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{ color: '#f1f5f9', borderBottom: '1px solid #374151' }}>
+          Stwórz nową notatkę
+        </DialogTitle>
+        <DialogContent sx={{ backgroundColor: '#1e2328' }}>
           <NoteForm
             onSubmit={handleCreateNote}
             onCancel={() => setIsCreateDialogOpen(false)}
@@ -273,9 +297,17 @@ export function NotesPage() {
         onClose={() => setEditingNote(null)}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: '#1e2328',
+            color: '#f1f5f9'
+          }
+        }}
       >
-        <DialogTitle>Edit Note</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{ color: '#f1f5f9', borderBottom: '1px solid #374151' }}>
+          Edit Note
+        </DialogTitle>
+        <DialogContent sx={{ backgroundColor: '#1e2328' }}>
           {editingNote && (
             <NoteForm
               initialData={editingNote}

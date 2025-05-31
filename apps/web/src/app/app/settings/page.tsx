@@ -27,7 +27,8 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  
+  const [date, setDate] = useState();
+
   // Form states
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -47,9 +48,10 @@ export default function SettingsPage() {
       const { data } = await apiClient.get('/customers/me');
       setCustomer(data);
       setEmail(data.email || '');
+
+      setDate(data.created_at)
     } catch (error) {
-      console.error('Failed to fetch customer:', error);
-      setMessage({ type: 'error', text: 'Failed to load profile' });
+      setMessage({ type: 'error', text: 'Nie udało się załadować profilu' });
     } finally {
       setLoading(false);
     }
@@ -66,9 +68,8 @@ export default function SettingsPage() {
       });
       
       setCustomer(data);
-      setMessage({ type: 'success', text: 'Profile updated successfully' });
+      setMessage({ type: 'success', text: 'Profil zaktualizowany pomyślnie.' });
     } catch (error: any) {
-      console.error('Failed to update settings:', error);
       const errorMessage = error.response?.data?.error || 'Failed to update profile';
       setMessage({ type: 'error', text: errorMessage });
     } finally {
@@ -79,12 +80,12 @@ export default function SettingsPage() {
 
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: 'New passwords do not match' });
+      setMessage({ type: 'error', text: 'Nowe hasła nie pasują' });
       return;
     }
     
     if (newPassword.length < 6) {
-      setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
+      setMessage({ type: 'error', text: 'Hasło musi być <6' });
       return;
     }
 
@@ -100,7 +101,7 @@ export default function SettingsPage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      setMessage({ type: 'success', text: 'Password changed successfully' });
+      setMessage({ type: 'success', text: 'Hasło zmienione pomyślnie' });
     } catch (error: any) {
       console.error('Failed to change password:', error);
       const errorMessage = error.response?.data?.error || 'Failed to change password. Check your current password.';
@@ -139,13 +140,12 @@ export default function SettingsPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f8fafc'
+        backgroundColor: '#1e2328'
       }}>
-        <Typography>Loading...</Typography>
       </Box>
     );
   }
-
+  console.log(customer?.createdAt)
   return (
     <Box sx={{ 
       position: 'fixed',
@@ -153,25 +153,29 @@ export default function SettingsPage() {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: '#f8fafc',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: '#1e2328',
+      color: '#f1f5f9'
     }}>
       {/* Header */}
       <Box sx={{ 
-        backgroundColor: 'white',
-        borderBottom: '1px solid #e2e8f0',
+        backgroundColor: '#6c28d9',
+        borderBottom: '1px solid #374151',
         p: 2,
         display: 'flex',
         alignItems: 'center',
         gap: 2,
         flexShrink: 0
       }}>
-        <IconButton onClick={() => router.back()}>
+        <IconButton 
+          onClick={() => router.back()}
+          sx={{ color: 'white' }}
+        >
           <ArrowBackIcon />
         </IconButton>
-        <Typography variant="h5" sx={{ fontWeight: 600, color: '#1e293b' }}>
-          Settings
+        <Typography variant="h5" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
+          Ustawienia
         </Typography>
       </Box>
 
@@ -183,12 +187,17 @@ export default function SettingsPage() {
         paddingLeft: "25%",
         paddingRight: "25%",
         mx: 'auto',
-        width: '100%'
+        width: '100%',
+        backgroundColor: '#030712'
       }}>
         {message && (
           <Alert 
             severity={message.type} 
-            sx={{ mb: 3 }}
+            sx={{ 
+              mb: 3,
+              backgroundColor: message.type === 'success' ? '#1e3a8a' : '#7f1d1d',
+              color: '#f1f5f9'
+            }}
             onClose={() => setMessage(null)}
           >
             {message.text}
@@ -196,10 +205,14 @@ export default function SettingsPage() {
         )}
 
         {/* Profile Settings */}
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ 
+          mb: 3,
+          backgroundColor: '#1e2328',
+          border: '1px solid #374151'
+        }}>
           <CardContent>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Profile Information
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#f1f5f9' }}>
+              Informacje o profilu
             </Typography>
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -211,59 +224,125 @@ export default function SettingsPage() {
                 fullWidth
                 variant="outlined"
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#f1f5f9',
+                    '& fieldset': { borderColor: '#374151' },
+                    '&:hover fieldset': { borderColor: '#4b5563' },
+                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#9ca3af',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#3b82f6',
+                  },
+                }}
               />
               
               <Button
                 variant="contained"
                 onClick={handleUpdateProfile}
                 disabled={saving || !email.trim()}
+
                 sx={{ 
+                    backgroundColor: '#872ffa',
+                     border: '1px white solid',
                   alignSelf: 'flex-start',
-                  backgroundColor: '#3b82f6',
                   '&:hover': { backgroundColor: '#2563eb' },
-                  textTransform: 'none'
+                  fontWeight: 500,
+                  color: 'white'
                 }}
               >
-                {saving ? 'Saving...' : 'Update Profile'}
+                {saving ? 'Zapisywanie...' : 'Zaktualizowano'}
               </Button>
             </Box>
           </CardContent>
         </Card>
 
         {/* Change Password */}
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ 
+          mb: 3,
+          backgroundColor: '#1e2328',
+          border: '1px solid #374151'
+        }}>
           <CardContent>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Change Password
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#f1f5f9' }}>
+              Zmiana hasła
             </Typography>
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
-                label="Current Password"
+                label="Obecne hasło"
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#f1f5f9',
+                    '& fieldset': { borderColor: '#374151' },
+                    '&:hover fieldset': { borderColor: '#4b5563' },
+                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#9ca3af',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#3b82f6',
+                  },
+                }}
               />
               
               <TextField
-                label="New Password"
+                label="Nowe hasło"
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 fullWidth
                 variant="outlined"
-                helperText="Password must be at least 6 characters"
+                helperText="Hasło musi mieć >6"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#f1f5f9',
+                    '& fieldset': { borderColor: '#374151' },
+                    '&:hover fieldset': { borderColor: '#4b5563' },
+                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#9ca3af',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#3b82f6',
+                  },
+                  '& .MuiFormHelperText-root': {
+                    color: '#9ca3af',
+                  },
+                }}
               />
               
               <TextField
-                label="Confirm New Password"
+                label="Potwierdź nowe hasło"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#f1f5f9',
+                    '& fieldset': { borderColor: '#374151' },
+                    '&:hover fieldset': { borderColor: '#4b5563' },
+                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#9ca3af',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#3b82f6',
+                  },
+                }}
               />
               
               <Button
@@ -272,44 +351,51 @@ export default function SettingsPage() {
                 disabled={saving || !currentPassword || !newPassword || !confirmPassword}
                 sx={{ 
                   alignSelf: 'flex-start',
-                  backgroundColor: '#3b82f6',
                   '&:hover': { backgroundColor: '#2563eb' },
-                  textTransform: 'none'
+                    backgroundColor: '#872ffa',
+                  fontWeight: 500,
+                
                 }}
               >
-                {saving ? 'Changing...' : 'Change Password'}
+                {saving ? 'Zmiana...' : 'Hasło zmienione'}
               </Button>
             </Box>
           </CardContent>
         </Card>
 
         {/* Account Info */}
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ 
+          mb: 3,
+          backgroundColor: '#1e2328',
+          border: '1px solid #374151'
+        }}>
           <CardContent>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Account Information
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#f1f5f9' }}>
+              Szczegóły konta
             </Typography>
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#9ca3af' }}>
                 <strong>Account ID:</strong> {customer?._id}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <strong>Member since:</strong> {customer?.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'}
+              <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+                <strong>Członek od:</strong> {date}
               </Typography>
             </Box>
           </CardContent>
         </Card>
 
         {/* Danger Zone */}
-        <Card sx={{ border: '1px solid #ef4444' }}>
+        <Card sx={{ 
+          border: '1px solid #ef4444',
+          backgroundColor: '#1e2328'
+        }}>
           <CardContent>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#ef4444' }}>
-              Danger Zone
-            </Typography>
+Uwaga            </Typography>
             
-            <Typography variant="body2" sx={{ mb: 2, color: '#64748b' }}>
-              Once you delete your account, there is no going back. Please be certain.
+            <Typography variant="body2" sx={{ mb: 2, color: '#9ca3af' }}>
+              Raz skasowane konto nie może być przywrócone. Bądź ostrożny.
             </Typography>
             
             <Button
@@ -317,9 +403,16 @@ export default function SettingsPage() {
               color="error"
               onClick={handleDeleteAccount}
               disabled={saving}
-              sx={{ textTransform: 'none' }}
+              sx={{ 
+                borderColor: '#ef4444',
+                color: '#ef4444',
+                '&:hover': {
+                  borderColor: '#dc2626',
+                  backgroundColor: '#7f1d1d'
+                }
+              }}
             >
-              {saving ? 'Deleting...' : 'Delete Account'}
+              {saving ? 'Usuwanie...' : 'Konto usunięte'}
             </Button>
           </CardContent>
         </Card>

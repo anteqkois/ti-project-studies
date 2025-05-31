@@ -98,12 +98,20 @@ export function PasswordSettings() {
   };
 
   return (
-    <Card>
+    <Card sx={{
+      backgroundColor: '#1e2328',
+      border: '1px solid #374151',
+      '&:hover': {
+        borderColor: '#4b5563',
+      }
+    }}>
       <CardHeader
         title={
           <Box display="flex" alignItems="center" gap={1}>
-            <LockIcon color="action" />
-            <Typography variant="h6">Password & Security</Typography>
+            <LockIcon sx={{ color: '#9ca3af' }} />
+            <Typography variant="h6" sx={{ color: '#f1f5f9' }}>
+              Password & Security
+            </Typography>
           </Box>
         }
         action={
@@ -112,18 +120,37 @@ export function PasswordSettings() {
               variant="outlined"
               size="small"
               onClick={() => setIsChanging(true)}
+              sx={{
+                borderColor: '#374151',
+                color: '#9ca3af',
+                '&:hover': {
+                  borderColor: '#4b5563',
+                  backgroundColor: '#374151'
+                }
+              }}
             >
               Change Password
             </Button>
           )
         }
+        sx={{
+          borderBottom: '1px solid #374151'
+        }}
       />
 
       <CardContent>
         {message && (
           <Alert
             severity={message.type === 'error' ? 'error' : 'success'}
-            sx={{ mb: 2 }}
+            sx={{ 
+              mb: 2,
+              backgroundColor: message.type === 'error' ? '#7f1d1d' : '#064e3b',
+              borderColor: message.type === 'error' ? '#991b1b' : '#047857',
+              color: message.type === 'error' ? '#fecaca' : '#a7f3d0',
+              '& .MuiAlert-icon': {
+                color: message.type === 'error' ? '#f87171' : '#10b981'
+              }
+            }}
             onClose={() => setMessage(null)}
           >
             {message.text}
@@ -131,11 +158,11 @@ export function PasswordSettings() {
         )}
 
         {!isChanging ? (
-          <Box sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>
-            <Typography variant="body2" sx={{ mb: 1 }}>
+          <Box sx={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+            <Typography variant="body2" sx={{ mb: 1, color: '#d1d5db' }}>
               Your password was last updated recently.
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ color: '#9ca3af' }}>
               We recommend using a strong, unique password for your account.
             </Typography>
           </Box>
@@ -153,6 +180,23 @@ export function PasswordSettings() {
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
               placeholder="Enter your current password"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#0f1419',
+                  color: '#f1f5f9',
+                  '& fieldset': { borderColor: '#374151' },
+                  '&:hover fieldset': { borderColor: '#4b5563' },
+                  '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#9ca3af',
+                  '&.Mui-focused': { color: '#3b82f6' }
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: '#6b7280',
+                  opacity: 1,
+                },
+              }}
             />
 
             <TextField
@@ -164,6 +208,26 @@ export function PasswordSettings() {
               required
               placeholder="Enter your new password"
               helperText="Must be at least 8 characters with uppercase, lowercase, and special characters"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#0f1419',
+                  color: '#f1f5f9',
+                  '& fieldset': { borderColor: '#374151' },
+                  '&:hover fieldset': { borderColor: '#4b5563' },
+                  '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#9ca3af',
+                  '&.Mui-focused': { color: '#3b82f6' }
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: '#6b7280',
+                  opacity: 1,
+                },
+                '& .MuiFormHelperText-root': {
+                  color: '#9ca3af'
+                }
+              }}
             />
 
             <TextField
@@ -174,15 +238,44 @@ export function PasswordSettings() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               placeholder="Confirm your new password"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#0f1419',
+                  color: '#f1f5f9',
+                  '& fieldset': { borderColor: '#374151' },
+                  '&:hover fieldset': { borderColor: '#4b5563' },
+                  '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#9ca3af',
+                  '&.Mui-focused': { color: '#3b82f6' }
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: '#6b7280',
+                  opacity: 1,
+                },
+              }}
             />
 
-            <Divider sx={{ my: 1 }} />
+            <Divider sx={{ my: 1, borderColor: '#374151' }} />
 
             <Box display="flex" justifyContent="flex-end" gap={1}>
               <Button
                 variant="outlined"
                 onClick={handleCancel}
                 disabled={isSubmitting}
+                sx={{
+                  borderColor: '#374151',
+                  color: '#9ca3af',
+                  '&:hover': {
+                    borderColor: '#4b5563',
+                    backgroundColor: '#374151'
+                  },
+                  '&:disabled': {
+                    borderColor: '#374151',
+                    color: '#6b7280'
+                  }
+                }}
               >
                 Cancel
               </Button>
@@ -195,7 +288,15 @@ export function PasswordSettings() {
                   !confirmPassword ||
                   isSubmitting
                 }
-                startIcon={isSubmitting ? <CircularProgress size={16} /> : null}
+                startIcon={isSubmitting ? <CircularProgress size={16} sx={{ color: 'white' }} /> : null}
+                sx={{
+                  backgroundColor: '#3b82f6',
+                  '&:hover': { backgroundColor: '#2563eb' },
+                  '&:disabled': { 
+                    backgroundColor: '#374151',
+                    color: '#6b7280'
+                  }
+                }}
               >
                 Update Password
               </Button>

@@ -41,9 +41,12 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
         display: 'flex',
         flexDirection: 'column',
         transition: 'all 0.2s ease-in-out',
+        backgroundColor: '#1e2328',
+        border: '1px solid #374151',
         '&:hover': {
           elevation: 8,
           transform: 'translateY(-2px)',
+          borderColor: '#4b5563',
         },
       }}
     >
@@ -66,15 +69,30 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
               WebkitBoxOrient: 'vertical',
               flexGrow: 1,
               mr: 1,
+              color: '#f1f5f9'
             }}
           >
             {note.title || 'Untitled'}
           </Typography>
           <Box>
-            <IconButton size="small" onClick={onEdit} color="primary">
+            <IconButton 
+              size="small" 
+              onClick={onEdit} 
+              sx={{ 
+                color: '#60a5fa',
+                '&:hover': { backgroundColor: '#374151' }
+              }}
+            >
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton size="small" onClick={onDelete} color="error">
+            <IconButton 
+              size="small" 
+              onClick={onDelete} 
+              sx={{ 
+                color: '#f87171',
+                '&:hover': { backgroundColor: '#374151' }
+              }}
+            >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -83,7 +101,6 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
         {note.content && (
           <Typography
             variant="body2"
-            color="text.secondary"
             sx={{
               mb: 2,
               overflow: 'hidden',
@@ -91,6 +108,7 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
               display: '-webkit-box',
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
+              color: '#d1d5db'
             }}
           >
             {note.content}
@@ -104,9 +122,17 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
                 key={tag}
                 label={tag}
                 size="small"
-                icon={<TagIcon />}
+                icon={<TagIcon sx={{ color: '#9ca3af' }} />}
                 variant="outlined"
-                sx={{ mb: 1 }}
+                sx={{ 
+                  mb: 1,
+                  backgroundColor: '#374151',
+                  borderColor: '#4b5563',
+                  color: '#e5e7eb',
+                  '& .MuiChip-icon': {
+                    color: '#9ca3af'
+                  }
+                }}
               />
             ))}
             {note.tags.length > 3 && (
@@ -114,16 +140,19 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
                 label={`+${note.tags.length - 3}`}
                 size="small"
                 variant="filled"
-                color="default"
-                sx={{ mb: 1 }}
+                sx={{ 
+                  mb: 1,
+                  backgroundColor: '#4b5563',
+                  color: '#e5e7eb'
+                }}
               />
             )}
           </Stack>
         )}
       </CardContent>
 
-      <CardActions sx={{ pt: 0, borderTop: 1, borderColor: 'divider' }}>
-        <Box display="flex" alignItems="center" color="text.secondary">
+      <CardActions sx={{ pt: 0, borderTop: 1, borderColor: '#374151' }}>
+        <Box display="flex" alignItems="center" sx={{ color: '#9ca3af' }}>
           <CalendarIcon sx={{ fontSize: 16, mr: 0.5 }} />
           <Typography variant="caption">
             Updated {formatDate(note.updated_at as unknown as string)}
