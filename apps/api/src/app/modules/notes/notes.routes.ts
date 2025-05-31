@@ -19,7 +19,7 @@ export const notesRoutes = async (fastify: FastifyInstance) => {
 
   // Create new note
   fastify.post(
-    '/',
+    '/notes',
     { preValidation: authMiddleware },
     NotesController.create
   );

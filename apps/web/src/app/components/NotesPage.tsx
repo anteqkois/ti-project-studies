@@ -37,7 +37,7 @@ export function NotesPage() {
 
   const fetchNotes = async () => {
     try {
-      const { data } = await apiClient.get('/notes')
+      const { data } = await apiClient.get('/notes/')
       console.log(data);
       setNotes(data);
     } catch (error) {
@@ -57,75 +57,61 @@ export function NotesPage() {
   );
 
   const handleCreateNote = async (noteData: {
-    title: string;
-    content: string;
-    tags: string[];
-  }) => {
-    try {
-      const response = await fetch('/notes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(noteData),
-      });
-
-      if (response.ok) {
-              console.log('dupa')
-
-        const newNote = await response.json();
-        setNotes((prev) => [newNote, ...prev]);
-        setIsCreateDialogOpen(false);
-      }
-    } catch (error) {
-      console.log('dupa')
-      console.error('Failed to create note:', error);
+  title: string;
+  content: string;
+  tags: string[];
+}) => {
+  try {
+    console.log(noteData)
+    const response = await apiClient.post('/notes/notes', noteData);
+    
+    if (response.status === 201) {
+      const newNote = response.data;
+      setNotes((prev) => [newNote, ...prev]);
+      setIsCreateDialogOpen(false);
     }
-  };
+  } catch (error) {
+    console.error('Failed to create note:', error);
+  }
+};
+const handleUpdateNote = async (
+  id: string,
+  noteData: { title: string; content: string; tags: string[] }
+) => {
+  try {
+    const { data } = await apiClient.put(`/notes/${id}`, noteData);
+    
+    setNotes((prev) =>
+      prev.map((note) => (note._id === id as unknown as Id ? data : note))
+    );
+    setEditingNote(null);
+  } catch (error) {
+    console.error('Failed to update note:', error);
+  }
+};
 
-  const handleUpdateNote = async (
-    id: string,
-    noteData: { title: string; content: string; tags: string[] }
-  ) => {
-    try {
-      const response = await fetch(`/notes/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(noteData),
-      });
+const handleDeleteNote = async (id: string) => {
+  if (!confirm('Czy na pewno chcesz usunąć notatke??')) return;
 
-      if (response.ok) {
-        const updatedNote = await response.json();
-        setNotes((prev) =>
-          prev.map((note) => (note._id === id as unknown as Id ? updatedNote : note))
-        );
-        setEditingNote(null);
-      }
-    } catch (error) {
-      console.error('Failed to update note:', error);
-    }
-  };
+  try {
+    await apiClient.delete(`/notes/${id}`);
+    
+    setNotes((prev) => prev.filter((note) => note._id !== id as unknown as Id));
+  } catch (error) {
+    console.error('Failed to delete note:', error);
+  }
+};
 
-  const handleDeleteNote = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this note?')) return;
-
-    try {
-      const response = await fetch(`/notes/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        setNotes((prev) => prev.filter((note) => note._id !== id as unknown as Id));
-      }
-    } catch (error) {
-      console.error('Failed to delete note:', error);
-    }
-  };
+const fetchNoteById = async (id: string): Promise<Note | null> => {
+  try {
+    const { data } = await apiClient.get(`/notes/${id}`);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch note:', error);
+    return null;
+  }
+};
+ 
 
   if (loading) {
     return (
@@ -227,7 +213,7 @@ export function NotesPage() {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Create New Note</DialogTitle>
+        <DialogTitle>Create Neww Note</DialogTitle>
         <DialogContent>
           <NoteForm
             onSubmit={handleCreateNote}
@@ -247,6 +233,7 @@ export function NotesPage() {
         <DialogContent>
           {editingNote && (
             <NoteForm
+              initialData={editingNote}
               onSubmit={(data) => handleUpdateNote(editingNote._id as unknown as string, data)}
               onCancel={() => setEditingNote(null)}
             />

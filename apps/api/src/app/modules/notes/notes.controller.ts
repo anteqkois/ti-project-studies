@@ -25,14 +25,16 @@ export class NotesController {
   }
 
   static async create(req: FastifyRequest<NotesCreate>, res: FastifyReply) {
+    console.log(1)
     const notesService = servicesContainer.get<NotesService>(NotesService);
+    console.log(2)
     const customerId = new ObjectId(req.customer.sub);
-    
+    console.log(3)
     const note = await notesService.create({
       ...req.body,
       customerId,
     });
-    
+    console.log(4)
     return res.status(201).send(note);
   }
 
