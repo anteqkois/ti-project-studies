@@ -88,6 +88,8 @@ export interface IdParams {
 // Cookie names
 export enum Cookies {
   ACCESS_TOKEN = 'ACCESS_TOKEN',
+  AUTH_STATUS = 'AUTH_STATUS',
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
 }
 
 

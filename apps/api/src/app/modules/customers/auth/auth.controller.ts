@@ -1,4 +1,4 @@
-import { Cookies, LoginInput, SignUpInput } from '@project/shared';
+import { AuthStatus, Cookies, LoginInput, SignUpInput } from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as jwt from 'jsonwebtoken';
 import { servicesContainer } from '../../../container';
@@ -30,6 +30,13 @@ export class AuthController {
         secure: true,
         maxAge: 60 * 60, // 60 minutes in seconds
       })
+      .setCookie(Cookies.AUTH_STATUS, AuthStatus.AUTHENTICATED, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+        maxAge: 60 * 60 * 10000,
+      })
       .send({ customer: newCustomer });
   }
 
@@ -58,12 +65,20 @@ export class AuthController {
         secure: true,
         maxAge: 60 * 60, // 60 minutes in seconds
       })
+      .setCookie(Cookies.AUTH_STATUS, AuthStatus.AUTHENTICATED, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+        maxAge: 60 * 60 * 10000,
+      })
       .send({ customer });
   }
 
   static async logout(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
     return res
       .clearCookie(Cookies.ACCESS_TOKEN, { path: '/' })
+      .clearCookie(Cookies.AUTH_STATUS, { path: '/' })
       .code(204)
       .send();
   }
