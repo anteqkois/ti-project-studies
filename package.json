@@ -7,10 +7,9 @@
     "web": "nx run web:dev",
     "build": "nx run-many --target=build",
     "api-prod": "node -r dotenv/config dist/apps/api/main.js dotenv_config_path=./apps/api/.env dotenv_config_debug=true",
-    "api:local": "node -r dotenv/config dist/apps/api/main.js dotenv_config_path=./apps/api/.env dotenv_config_debug=true",
-    "web-prod": "nx run web:dev",
+    "web-prod": "cd apps/web && npx next start",
     "dev": "concurrently -p \"[{name}]\" -n \"api,web\" -c \"bgBlue.bold,bgGreen.bold,bgCyan.bold\" \"npm:api\" \"npm:web\"",
-    "prod": "concurrently -p \"[{name}]\" -n \"api,web\" -c \"bgBlue.bold,bgGreen.bold,bgCyan.bold\" \"npm:api-prod\" \"npm:web-prod\""
+    "start-prod": "concurrently -p \"[{name}]\" -n \"api,web\" -c \"bgBlue.bold,bgGreen.bold,bgCyan.bold\" \"npm:api-prod\" \"npm:web-prod\""
   },
   "private": true,
   "dependencies": {

@@ -7,17 +7,19 @@ Należy otworzyć terminal w katalogiu projektu (czyli ten sam w którym znajduj
   - **.env.web** do katalogu `apps/web` i zmienić jego nazwę na **.env**
 - zainsatlować pakiety `npm install`
 - zbudować projekt `npm run build`
-- oraz na sam koniec wystartować aplikację `npm run start`
+- oraz na sam koniec wystartować aplikację `npm run start-prod`
+W terminalu powinny się pojawić komunikaty odnośnie wystartowania aplikacji
+Należy wejść na w przeglądarce na adres **http://localhost:3000/**
 
 ### Walidacja
 Walidacja danych na serwerze, jest wykonana wykorzystując natywnie wbudowaną opcję fastifyJS i JSON schema.
 Przykład w pliku **apps/api/src/app/modules/customers/auth/auth.routes.ts**
-![Użycie walidacji za pomocą JSON Schema](docs/image.png)
+![Użycie walidacji za pomocą JSON Schema](docs/json-schema.png)
 
 Dodatkowo można zastosować bardziej skomplikowane parsowanie danych za pomocą biblioteki `zod`.
 Np. sprawdzenie
 Przykład w pliku **libs/shared/src/lib/modules/customers/auth/index.ts**
-![alt text](image.png)
+![Użycie walidacji za pomocą zod](docs/zod-schema.png)
 
 ### Użyte technologie
 **NX monorepo do zarządzania aplikacjami**
