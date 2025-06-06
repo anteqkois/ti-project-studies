@@ -71,7 +71,7 @@ export const CookiesModal = ({
           <span className="text-xs">
             By clicking &quot;<span className="font-medium opacity-80">Accept</span>&quot;, you agree to our use of cookies.
           </span>{' '}
-          <a rel="noreferrer noopener" target="_blank" href="/docs/linkerry_polityka_prywatności.pdf" className="text-xs underline">
+          <a rel="noreferrer noopener" target="_blank" href="/docs/polityka_prywatności.pdf" className="text-xs underline">
             Learn more.
           </a>
         </p>

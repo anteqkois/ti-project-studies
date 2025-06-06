@@ -9,7 +9,7 @@ import {
   SignUpResponse,
   assertNotNullOrUndefined,
 } from '@project/shared';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   Dispatch,
   PropsWithChildren,
@@ -53,7 +53,7 @@ export function CustomerProvider({ children }: PropsWithChildren) {
   const [emialVerificationDialog, setEmailVerificationDialog] =
     useState<boolean>(false);
   const { push } = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   const signUp = useCallback(async (data: SignUpInput) => {
     const response = await AuthApi.signUp(data);
@@ -76,8 +76,8 @@ export function CustomerProvider({ children }: PropsWithChildren) {
       return push('/app/dashboard');
     }
 
-    const from = searchParams.get('from');
-    if (from) return push(from);
+    // const from = searchParams.get('from');
+    // if (from) return push(from);
 
     return push('/app/dashboard');
   }, []);

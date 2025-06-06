@@ -1,4 +1,10 @@
-import { AuthStatus, Cookies, LoginInput, SignUpInput } from '@project/shared';
+import {
+  AuthStatus,
+  Cookies,
+  LoginInput,
+  SignUpInput,
+  signUpInputSchema,
+} from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as jwt from 'jsonwebtoken';
 import { servicesContainer } from '../../../container';
@@ -8,9 +14,10 @@ export class AuthController {
   static async signiUp(req: FastifyRequest<SignInRequest>, res: FastifyReply) {
     const authService = servicesContainer.get<AuthService>(AuthService);
 
-    const { email, name, password } = req.body;
+    const parsedData = signUpInputSchema.safeParse(req.body);
+    if (parsedData.success) return res.unprocessableEntity(`Invalid data`);
 
-    const newCustomer = await authService.register(email, password, name);
+    const newCustomer = await authService.register(parsedData.data.email, parsedData.data.password, parsedData.data.name);
 
     const token = await jwt.sign(
       { sub: newCustomer._id },
@@ -75,7 +82,7 @@ export class AuthController {
       .send({ customer });
   }
 
-  static async logout(req: FastifyRequest<LoginRequest>, res: FastifyReply) {
+  static async logout(req: FastifyRequest, res: FastifyReply) {
     return res
       .clearCookie(Cookies.ACCESS_TOKEN, { path: '/' })
       .clearCookie(Cookies.AUTH_STATUS, { path: '/' })

@@ -6,6 +6,13 @@ export enum CustomerRole {
   TESTER = 'TESTER',
 }
 
+export interface CustomerSettings {
+  theme?: 'light' | 'dark' | 'system';
+  language?: string;
+  emailNotifications?: boolean;
+  defaultNotePrivacy?: 'private' | 'public';
+}
+
 export interface Customer extends BaseDatabaseFields {
   name: string;
   roles: CustomerRole[];
@@ -13,5 +20,11 @@ export interface Customer extends BaseDatabaseFields {
   email: string;
   email_verified_datetime?: Date;
   deleted_datetime?: Date;
-  settings: object;
+  settings: CustomerSettings;
+}
+
+export interface UpdateCustomerInput {
+  name?: string;
+  email?: string;
+  settings?: Partial<CustomerSettings>;
 }

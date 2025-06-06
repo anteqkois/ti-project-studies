@@ -1,4 +1,4 @@
-import { isCustomHttpException } from '@linkerry/shared'
+import { isCustomHttpException } from '@project/shared'
 import { isAxiosError } from 'axios'
 import { MouseEvent } from 'react'
 

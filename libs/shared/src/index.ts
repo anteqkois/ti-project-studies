@@ -3,6 +3,6 @@ export * from './lib/constants'
 
 export * from './lib/libs/fastify'
 export * from './lib/libs/mongodb'
-export {Cookies, UpdateCustomerInput, Note, Id, CreateNoteInput, UpdateNoteInput, getDbName} from './lib/libs/mongodb/types'
+export * from './lib/libs/mongodb/types'
 export * from './lib/modules/customers'
-
+export * from './lib/modules/notes'
