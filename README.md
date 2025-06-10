@@ -1,13 +1,31 @@
 # Dokuemntacja
 
+## Note.App - aplikacja do zarządzania notatkami
+
+### Opis aplikacji
+Note.App to aplikacja webowa służąca do tworzenia, edytowania i zarządzania notatkami. Umożliwia rejestrację i logowanie użytkowników, a także organizowanie notatek za pomocą tagów. Projekt został stworzony jako aplikacja full-stack z wykorzystaniem technologii takich jak Fastify, MongoDB, Next.js, Tailwind i NX. Celem aplikacji jest zapewnienie prostego, ale funkcjonalnego narzędzia do efektywnego notowania i organizacji informacji, z naciskiem na szybkie działanie, modularność i czysty kod.
+
+### Wymagania do wystartowania projektu
+- `node.js` w wersji > 18
+- menadżer pakietów `npm`
+
 ### Jak wystartować projekt
 Należy otworzyć terminal w katalogiu projektu (czyli ten sam w którym znajduje się to README.md), a następnie zgodnie z komendami:
 - skopiować pliki **env** do odpowiednich katalogów:
   - **.env.api** do katalogu `apps/api` i zmienić jego nazwę na **.env**
   - **.env.web** do katalogu `apps/web` i zmienić jego nazwę na **.env**
-- zainsatlować pakiety `npm install`
-- zbudować projekt `npm run build`
-- oraz na sam koniec wystartować aplikację `npm run start-prod`
+- zainsatlować pakiety:
+```sh
+npm install
+```
+- zbudować projekt
+```sh
+npm run build
+```
+- oraz na sam koniec wystartować aplikację
+```sh
+npm run start-prod
+```
 W terminalu powinny się pojawić komunikaty odnośnie wystartowania aplikacji
 Należy wejść na w przeglądarce na adres **http://localhost:3000/**
 
