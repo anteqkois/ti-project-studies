@@ -112,7 +112,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    if (!confirm('Jesteś pewny usunięcia konta?')) {
       return;
     }
     
@@ -124,7 +124,7 @@ export default function SettingsPage() {
       router.push('/login');
     } catch (error) {
       console.error('Failed to delete account:', error);
-      setMessage({ type: 'error', text: 'Failed to delete account' });
+      setMessage({ type: 'error', text: 'Nie udało się skasować konta' });
       setSaving(false);
     }
   };
@@ -412,7 +412,7 @@ Uwaga            </Typography>
                 }
               }}
             >
-              {saving ? 'Usuwanie...' : 'Konto usunięte'}
+              {saving ? 'Usuwanie...' : 'Usuń'}
             </Button>
           </CardContent>
         </Card>

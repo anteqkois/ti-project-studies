@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default async function IndexPage() {
   return (
-<main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-600 to-gray-800 px-4">      <div className="text-center max-w-md mx-auto">
+<main style={{color: "#872ffa"}} className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br  px-4">      <div className="text-center max-w-md mx-auto">
         <div className="mb-14">
                 <Icons.LogoWhole className="mx-auto h-16 w-80 md:h-20 md:w-160" />
                 <p className="text-center">Twórz szybkie notatki już dziś</p>

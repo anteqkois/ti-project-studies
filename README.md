@@ -82,3 +82,61 @@ Własna paczka komponentów oparta na shadcn pozwala na zachowanie spójności w
 
 ### Modele
 
+Aplikacja wykorzystuje następujące modele danych przechowywane w bazie MongoDB:
+
+**Customers**
+
+**Pola:**
+- `_id`: `ObjectId` - identyfikator użytkownika
+- `name`: `string` - nazwa użytkownika 
+- `email`: `string` - adres email użytkownika
+- `password`: `string` - hasło użytkownika
+- `roles`: `CustomerRole[]` - tablica ról użytkownika
+- `settings`: `object` - obiekt z ustawieniami użytkownika 
+- `created_at`: `Date` - data utworzenia konta
+- `email_verified_datetime`: `Date | null` - data weryfikacji adresu email 
+
+
+**Operacje:**
+Rejestracja użytkownika
+Logowanie i weryfikacja danych uwierzytelniających
+Aktualizacja ustawień profilu
+Zmiana hasła
+Usunięcie konta 
+
+
+**Notes:**
+
+**Pola:**
+- `_id`: `ObjectId` - unikalny identyfikator notatki (automatycznie generowany przez MongoDB)
+- `title`: `string` - tytuł notatki (wymagany)
+- `content`: `string` - treść notatki (opcjonalna, domyślnie pusty string)
+- `customerId`: `ObjectId` - identyfikator właściciela notatki (referencja do Customer._id)
+- `tags`: `string[]` - tablica tagów przypisanych do notatki (opcjonalna)
+- `created_at`: `Date` - data utworzenia notatki
+- `updated_at`: `Date` - data ostatniej modyfikacji notatki
+
+
+**Operacje:**
+Pobieranie wszystkich notatek użytkownika
+Pobieranie pojedynczej notatki po ID
+Tworzenie nowej notatki
+Aktualizacja istniejącej notatki
+Usuwanie notatki
+Wyszukiwanie notatek po tytule, treści lub tagach
+
+
+
+Każda notatka jest powiązana z konkretnym użytkownikiem poprzez pole `customerId`
+Relacja jeden-do-wielu: jeden użytkownik może mieć wiele notatek
+Przy usunięciu użytkownika wszystkie jego notatki są automatycznie usuwane
+
+## Kolekcje w bazie danych
+
+Aplikacja wykorzystuje enum `DatabaseCollection` do definiowania nazw kolekcji:
+
+```typescript
+enum DatabaseCollection {
+  customers = 'customers',
+  notes = 'notes',
+}```
