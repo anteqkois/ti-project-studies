@@ -6,6 +6,8 @@ tmp
 /out-tsc
 
 .env
+.env.api
+.env.web
 
 # dependencies
 node_modules
