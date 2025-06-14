@@ -15,9 +15,13 @@ export class AuthController {
     const authService = servicesContainer.get<AuthService>(AuthService);
 
     const parsedData = signUpInputSchema.safeParse(req.body);
-    if (parsedData.success) return res.unprocessableEntity(`Invalid data`);
+    if (!parsedData.success) return res.unprocessableEntity(`Invalid data`);
 
-    const newCustomer = await authService.register(parsedData.data.email, parsedData.data.password, parsedData.data.name);
+    const newCustomer = await authService.register(
+      parsedData.data.email,
+      parsedData.data.password,
+      parsedData.data.name
+    );
 
     const token = await jwt.sign(
       { sub: newCustomer._id },
