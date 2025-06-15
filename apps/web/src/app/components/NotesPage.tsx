@@ -29,7 +29,10 @@ import { NoteForm } from './NoteForm';
 import { useCustomer } from '../../modules/customer/useCustomer';
 
 export function NotesPage() {
+
   const [notes, setNotes] = useState<Note[]>([]);
+
+
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
@@ -220,14 +223,16 @@ export function NotesPage() {
         </Box>
 
         {/* Stats */}
-        <Typography variant="body2" sx={{ color: '#9ca3af', mb: 3 }}>
+
+        <Typography variant="body2" sx={{ color: '#9ca3af' }}>
           Suma posiadanych materiałów: {notes.length} {notes.length === 1 ? 'notatka' : 'notki'}
         </Typography>
 
         {/* Notes */}
+
+        
         {filteredNotes.length === 0 ? (
-          <Paper sx={{ 
-            p: 6, 
+          <Paper sx={{  
             textAlign: 'center',
             backgroundColor: '#1e2328',
             border: '1px solid #374151'
@@ -305,7 +310,7 @@ export function NotesPage() {
         }}
       >
         <DialogTitle sx={{ color: '#f1f5f9', borderBottom: '1px solid #374151' }}>
-          Edit Note
+          Edytuj
         </DialogTitle>
         <DialogContent sx={{ backgroundColor: '#1e2328' }}>
           {editingNote && (
