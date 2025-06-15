@@ -1,4 +1,4 @@
-import { UpdateCustomerInput } from '@project/shared';
+import { Cookies, UpdateCustomerInput } from '@project/shared';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ObjectId } from 'mongodb';
 import { servicesContainer } from '../../container';
@@ -46,7 +46,7 @@ export class CustomerController {
 
     // Clear the auth cookie
     return res
-      .clearCookie('ACCESS_TOKEN', { path: '/' })
+      .clearCookie(Cookies.ACCESS_TOKEN, { path: '/' })
       .status(204)
       .send();
   }
